@@ -1,10 +1,20 @@
 # Flauth
+#
+>  flask-based user authentication system
+
 
 ## Features
 
 - User Login and Registration
 - Account Management (Email and Password Update, Account Deletion)
 - Two Factor Authentication (using Authenticator App)
+
+    ### Upcoming
+    
+    - hcaptcha in login and registration pages
+    - Sign out from all devices
+    - Email Verification
+    - Password Recovery
 
 ## Technologies
 
