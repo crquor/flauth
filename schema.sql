@@ -9,6 +9,8 @@ CREATE TABLE users(
     UNIQUE(username,email,secret_key)
 );
 
+// This table will be used when the session storage is switched from filesystem to mysql database.
+    
 CREATE TABLE user_sessions (
     session_id VARCHAR(255) PRIMARY KEY,
     user_id INT NOT NULL,
