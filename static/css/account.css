@@ -1,0 +1,121 @@
+body {
+    padding-bottom: 100px;
+}
+
+.title {
+    margin-top: 50px;
+    padding-bottom: 20px;
+}
+
+.outlogbtn:hover {
+    font-weight: bold;
+}
+
+.customrow {
+    margin-top: 50px;
+}
+
+.managesec {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 12px;
+    padding: 2rem;
+    border: 1.5px solid #353535;
+    border-radius: 10px;
+    word-wrap: break-word;
+}
+
+.value {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 9px;
+    max-width: 100%;
+    background-color: var(--value-bg-color);
+    color: #f1f1f1;
+    font-size: 1.2rem;
+    border-radius: 7px;
+}
+
+.hremod {
+    text-decoration: none;
+    padding: 7px 8px;
+    font-weight: bold;
+    color: var(--button-color);
+    border: 3px solid var(--button-color);
+    border-radius: 7px;
+    transition: all 0.3s ease-in-out;
+    background-color: transparent;
+    box-sizing: border-box;
+}
+
+.hremod:hover {
+    border: 3px solid var(--button-color);
+    background-color: var(--button-color);
+    color: var(--body-text-color);
+}
+
+.form-switch .form-check-input {
+    width: 3rem !important;
+    height: 1.4rem;
+    padding-right: 5px;
+
+}
+
+.qrcode-container {
+    text-align: center;
+    max-width: 100%;
+}
+
+.qrcode-img {
+    width: 100%;
+    height: auto;
+    max-width: 200px;
+    margin: 20px 0px 20px 0px;
+}
+
+.verifyvalue {
+    display: inline-block;
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: 7px;
+    font-size: 0.9rem;
+    background-color: var(--value-bg-color);
+    border-radius: 7px;
+}
+
+.verifyform {
+    margin-top: 20px;
+}
+
+.verifyform .input-label {
+    display: inline-block;
+    padding-bottom: 12px;
+}
+
+.verifybtn {
+    background-color: var(--button-color);
+    color: var(--body-text-color);
+    padding: 9px;
+    border: none;
+    border-radius: 7px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+.verifybtn:hover {
+    background-color: var(--button-hover-color);
+}
+
+.delcm {
+    margin-top: 7px;
+}
+
+.customalert {
+    max-width: 100%;
+}
+
+@media (max-width:507px) {
+    .col1 {
+        border: none;
+    }
+}

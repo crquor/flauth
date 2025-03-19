@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+
+{% block title %}SIGN UP{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="/static/css/submittableforms.css">
+{% endblock %}
+
+{% block body %}
+
+<div class="container d-flex flex-column justify-content-center align-items-center">
+    <div class="page-title">
+        <h1>Create an account</h1>
+    </div>
+    <br>
+    <div class="wrapper">
+        <!-- Alert box -->
+        <div class="alert alertbox d-none" role="alert" id="alert-box">
+            <strong id="alert-message"></strong>
+        </div>
+        <!-- Alert box end -->
+        <form class="form" id="postreg">
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email"
+                    required autofocus>
+                <label for="email">Email address</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="username" placeholder="Username"
+                    title="5-12 characters long" name="username" minlength="5" maxlength="15" required>
+                <label for="username">Username</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="password" placeholder="Password"
+                    title="Password must contain at least a uppercase and a lowercase letter, a number, and a special symbol"
+                    name="password" minlength="8" requireed>
+                <label for="password">Create a password</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password"
+                    title="Password must contain at least one uppercase and one lowercase letter, a number, and a special character"
+                    name="confirmPassword" minlength="8" required>
+
+                <label for="confirmPassword">Confirm Password</label>
+            </div>
+            <br>
+            <button type="submit" class="formSubmitbtn">
+                <span id="btn-text">REGISTER</span>
+                <span id="btn-spinner" class="spinner-border spinner-border-sm d-none"
+                    style="width: 1.5rem; height: 1.5rem;"></span>
+            </button>
+        </form>
+        <br>
+        <div class="linkre text-center">
+            <strong>Already have an account? <a href="/auth/login">Login</a></strong>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+
+    $(document).ready(function () {
+
+        $(' #postreg').submit(function (event) {
+            event.preventDefault();
+            let btnText = document.getElementById("btn-text");
+            let btnSpinner = document.getElementById("btn-spinner");
+            btnText.classList.add("d-none"); btnSpinner.classList.remove("d-none");
+            let alertBox = document.getElementById("alert-box");
+            let alertMessage = document.getElementById("alert-message");
+
+            $.ajax({
+                url: "/auth/register",
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function (response) {
+                    if (response.error) {
+                        alertMessage.textContent = response.error;
+                        alertBox.classList.remove("d-none","alert-danger");
+                        alertBox.classList.add("alert-warning");
+                    } else {
+                        $('#postreg')[0].reset();
+                        alertMessage.textContent = "Registration successfull";
+                        alertBox.classList.remove("d-none","alert-warning","alert-danger");
+                        alertBox.classList.add("alert-success");
+                    }
+                },
+                error: function () {
+                    errorMessage.textContent = "An unexpected error occurred";
+                    alertBox.classList.remove("d-none", "alert-warning");
+                    alertBox.classList.add("alert-danger")
+                },
+                complete: function () {
+                    btnText.classList.remove("d-none");
+                    btnSpinner.classList.add("d-none");
+                }
+            });
+        });
+    }); </script>
+{% endblock %}

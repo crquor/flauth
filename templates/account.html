@@ -1,0 +1,250 @@
+{% extends "layout.html" %}
+
+{% block title %}Manage Account{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="/static/css/submittableforms.css">
+<link rel="stylesheet" href="/static/css/account.css">
+{% endblock %}
+
+{% block body %}
+
+<h1 class="text-center title">Manage Your Account</h1>
+<div class="d-flex justify-content-center">
+    <a href="/account/logout" class="btn btn-secondary" style="font-weight: bold;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+</div>
+<br>
+
+<!-- Container: Start -->
+<div class="container d-flex justify-content-center align-items-center flex-column">
+    <div class="row w-100">
+        <div class="col col1">
+            <div class="managesec">
+                <h4>Username</h4>
+                <br>
+                <div class="value">{{ session["username"] }}</div>
+            </div>
+            <div class="managesec">
+                <h4>Email</h4>
+                <div class="value">{{ email }}</div>
+                <br>
+                <br>
+                <!-- Change email modal -->
+                <button type="button" class="hremod" data-bs-toggle="modal" data-bs-target="#changeEmailModal">
+                    <i class="fa-solid fa-envelope"></i> Change email
+                </button>
+
+                <div class="modal fade" id="changeEmailModal" tabindex="-1" aria-labelledby="changeEmailModal"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Change email</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert d-none" role="alert" id="alertBox">
+                                    <strong id="alert-message"></strong>
+                                </div>
+                                <form id="postchem">
+                                    <div class="form-floating mb-3">
+                                        <input type="email" id="newEmail" class="form-control" placeholder="New email" name="newEmail"
+                                            required>
+                                        <label for="newEmail">New Email</label>
+                                    </div>
+                                    <div class="form-floating">
+                                        <input type="password" id="password" class="form-control" placeholder="Verify Password"
+                                            name="password" required>
+                                        <label for="password">Verify Password</label>
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    style="font-weight: bold;">Cancel</button>
+                                <button type="submit" class="btn modformSubmitbtn">
+                                    <span id="btn-text" style="font-weight: bold;">CHANGE EMAIL</span>
+                                    <span id="btn-spinner" class="spinner-border spinner-border-sm d-none"
+                                        style="width: 1.5rem; height: 1.5rem;"></span>
+                                </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Change Email Modal End -->
+
+            </div>
+
+            <div class="managesec">
+                <h4>Password</h4>
+                <p class="moddate">Last changed on: {{ pwdstatus }}</p>
+                <br>
+                <button class="hremod" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i
+                        class="fa-solid fa-key"></i> Change Password</button>
+
+                <!-- Change Password Modal -->
+
+                <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModal"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Change Password</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert d-none" role="alert" id="alertBox1">
+                                    <strong id="alert-message1"></strong>
+                                </div>
+                                <form id="postchpwd">
+                                    <div class="form-floating mb-3">
+                                        <input type="password" id="currentPassword" class="form-control" placeholder="Current password"
+                                            name="currentPassword" required>
+                                        <label for="currentPassword">Current Password</label>
+                                    </div>
+                                    <div class="form-floating">
+                                        <input type="password" id="newPassword" class="form-control" placeholder="New Password"
+                                            name="newPassword"
+                                            title="Password must contain at least a uppercase and a lowercase letter, a number, and a special symbol"
+                                            required>
+                                        <label for="newPassword">New Password</label>
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    style="font-weight: bold;">Cancel</button>
+                                <button type="submit" class="btn modformSubmitbtn">
+                                    <span id="btn-text1" style="font-weight: bold;">CHANGE PASSWORD</span>
+                                    <span id="btn-spinner1" class="spinner-border spinner-border-sm d-none"
+                                        style="width: 1.5rem; height: 1.5rem;"></span>
+                                </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Change Password Modal End -->
+
+            </div>
+        </div>
+        <div class="col">
+            <div class="managesec">
+                <h4>Two Factor Authentication (2FA)</h4>
+                <br>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="enable-2fa" {% if secvfn
+                        %}checked{% else %}{% endif %}>
+                    <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                </div>
+                <br>
+
+                <div id="fa-enabled" style="display: none">
+                    <div id="qrcode-container" class="qrcode-container">
+                        <strong>Scan the QR code below</strong>
+                        <br>
+                        <img id="qrcode-img" class="qrcode-img" src="data:image/png;base64,{{ qr_code }}"
+                            alt="Scan QR Code">
+                    </div>
+                    <div class="secret_key">
+                        <strong class="text-center">OR, use</strong>
+                        <div class="verifyvalue" id="value"></div>
+                    </div>
+                    <div class="verification">
+                        <br>
+                        <div class="alert d-none" role="alert" id="alertBox3">
+                            <strong id="alert-message3"></strong>
+                        </div>
+                        <form class="verifyform" id="postsecver">
+                            <span class="input-label">Enter code from your Authenticator app</span>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="totp" placeholder="Code"
+                                    style="width:15rem;max-width: 100%;" name="totp" pattern="\d{6}" required
+                                    title="Enter 6 digit code from your authenticator app">
+                                <label for="totp">Code</label>
+                            </div>
+                            <button type="submit" class="verifybtn"><span id="btn-text3"
+                                    style="font-weight: bold;">Verify</span>
+                                <span id="btn-spinner3" class="spinner-border spinner-border-sm d-none"
+                                    style="width: 1.5rem; height: 1.5rem;"></span></button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+    <div class="row w-100">
+        <div class="col">
+            <div class="managesec">
+
+                <div class="alert alert-danger d-flex align-items-center customalert" role="alert">
+                    <div>
+                        <i class="fa-duotone fa-solid fa-triangle-exclamation fa-flip-horizontal"
+                            style="--fa-primary-color: #FFD43B; --fa-secondary-color: #FFD43B;"></i> This is danger
+                        zone!
+                    </div>
+                </div>
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-danger custombtn" data-bs-toggle="modal"
+                    data-bs-target="#deleteAccountModal" style="font-weight: bold;">
+                    Delete Account
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModal"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="modalLabel" style="font-weight: bolder;"><i
+                                        class="fa-regular fa-face-frown fa-lg"></i> Delete Your Account Permanently</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <strong>Are you sure that you want to delete your account?</strong>
+                                <div class="alert d-none" role="alert" id="alertBox2" style="margin-top: 5px;">
+                                    <strong id="alert-message2"></strong>
+                                </div>
+                                <form class="delcm" id="postdelac">
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control" id="password"
+                                            placeholder="Password" name="password" required>
+                                        <label for="password">Verify Password</label>
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    style="font-weight: bold;">Cancel</button>
+                                <button type="submit" class="btn btn-danger">
+                                    <span id="btn-text2" style="font-weight: bold;"><i
+                                            class="fa-solid fa-triangle-exclamation"></i> CONFIRM DELETION</span>
+                                    <span id="btn-spinner2" class="spinner-border spinner-border-sm d-none"
+                                        style="width: 1.5rem; height: 1.5rem;"></span>
+                                </button>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Delete Account Modal End -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+<script src="/static/js/mac.js">
+</script>
+{% endblock %}

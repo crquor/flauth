@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+{% block title %}Verify 2FA{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="/static/css/submittableforms.css">
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid d-flex flex-column justify-content-center align-items-center">
+    <div class="page-title">
+        <h1>Two Factor Authentication</h1>
+    </div>
+    <br>
+    <div class="wrapper">
+        <!-- Error box -->
+        <div class="alert alertbox d-none" role="alert" id="error-box">
+            <strong id="error-message"></strong>
+        </div>
+        <!-- Error box end -->
+        <form class="form" id="secondary-verification">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" placeholder="Code"
+                    title="Enter 6 digit code from your authenticator app" name="totp" pattern="\d{6}" autofocus required>
+                <label for="floatingInput">Code</label>
+            </div>
+            <br>
+            <button type="submit" class="formSubmitbtn">
+                <span id="btn-text">Verify</span>
+                <span id="btn-spinner" class="spinner-border spinner-border-sm d-none"
+                    style="width: 1.5rem; height: 1.5rem;"></span>
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+    $(document).ready(function () {
+        $("#secondary-verification").submit(function (event) {
+
+            event.preventDefault();
+
+            let btnText = document.getElementById("btn-text");
+            let btnSpinner = document.getElementById("btn-spinner");
+
+            let alertBox = document.getElementById("error-box");
+            let errorMessage = document.getElementById("error-message");
+
+            $.ajax({
+
+                url: "/auth/secondary-verification",
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function (response) {
+
+                    if (response.error) {
+                        errorMessage.textContent = response.error;
+                        alertBox.classList.remove("d-none", "alert-danger");
+                        alertBox.classList.add("alert-warning");
+                    }
+                    else if (response.restrict) {
+                        errorMessage.textContent = "Access Denied";
+                        alertBox.classList.remove("d-none", "alert-warning");
+                        alertBox.classList.add("alert-danger");
+                        setTimeout(function () {
+                            window.location.href = "/auth/login";
+                        }, 5000);
+                    }
+                    else {
+                        window.location.href = "/account"
+                    }
+
+                },
+                error: function () {
+                    errorMessage.textContent = "An unexpected error occurred"
+                    alertBox.classList.remove("d-none", "alert-warning");
+                    alertBox.classList.add("alert-danger");
+                },
+                complete: function () {
+                    btnText.classList.remove("d-none");
+                    btnSpinner.classList.add("d-none");
+                }
+
+            });
+
+        });
+    });
+</script>
+
+{% endblock %}
