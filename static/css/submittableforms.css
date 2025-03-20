@@ -64,6 +64,10 @@
     border: none
 }
 
+.h-captcha iframe {
+    max-width: 100% !important;
+}
+
 .linkre {
     margin-top: 20px;
 }

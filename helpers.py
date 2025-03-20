@@ -58,3 +58,25 @@ def ispwd_strong(password):
     pattern = r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;\"'<>,.?/~`|\\-]).{8,}$"
 
     return re.search(pattern, password)
+
+
+# hcaptcha verification
+def verify_hcaptcha(hcaptcha_response):
+
+    url = "https://api.hcaptcha.com/siteverify"
+    data = {
+        "secret": "ES_75d8642d4d8746539866c0b2ebc5510d",
+        "response": hcaptcha_response,
+    }
+
+    response = requests.post(url, data)
+
+    if not response.status_code == 200:
+        return False
+
+    data = response.json()
+
+    if data["success"]:
+        return True
+
+    return False

@@ -32,6 +32,8 @@
                 <label for="password">Password</label>
             </div>
             <br>
+            <div class="h-captcha" data-sitekey="c52290c0-22da-4c34-afde-7ac8a29004d4"></div>
+            <br>
             <button type="submit" class="formSubmitbtn">
                 <span id="btn-text">LOGIN</span>
                 <span id="btn-spinner" class="spinner-border spinner-border-sm d-none"
@@ -68,7 +70,7 @@
                 data: $(this).serialize(),
                 dataType: "json",
                 success: function (response) {
-
+                    hcaptcha.reset();
                     if (response.error) {
                         errorMessage.textContent = response.error;
                         alertBox.classList.remove("d-none", "alert-danger");
@@ -83,6 +85,7 @@
 
                 },
                 error: function () {
+                    hcaptcha.reset();
                     errorMessage.textContent = "An unexpected error occurred"
                     alertBox.classList.remove("d-none")
                 },
@@ -96,5 +99,5 @@
         });
     });
 </script>
-
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 {% endblock %}

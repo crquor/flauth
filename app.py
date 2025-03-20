@@ -10,7 +10,13 @@ from flask import (
     abort,
 )
 from flask_session import Session
-from helpers import get_db_connection, login_required, validate_email, ispwd_strong
+from helpers import (
+    get_db_connection,
+    login_required,
+    validate_email,
+    ispwd_strong,
+    verify_hcaptcha,
+)
 from mysql.connector import connect, IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date
@@ -20,6 +26,7 @@ import pyotp
 import qrcode
 import io
 import base64
+import requests
 
 # Configure the app
 app = Flask(__name__)
@@ -63,10 +70,15 @@ def register():
     username = request.form.get("username").strip()
     password = request.form.get("password").strip()
     confirmPassword = request.form.get("confirmPassword").strip()
+    hcaptcha_response = request.form.get("h-captcha-response").strip()
 
     # Server Side Form Validation -> Start
-    if not (email and username and password and confirmPassword):
-        return jsonify({"error": "All fields are required"})
+
+    if not (email and username and password and confirmPassword and hcaptcha_response):
+        return jsonify({"error": "All fields including captcha are required"})
+
+    if not verify_hcaptcha(hcaptcha_response):
+        return jsonify({"Captcha verification failed"})
 
     if not validate_email(email):
         return jsonify({"error": "Invalid Email"})
@@ -143,10 +155,14 @@ def login():
     # Handle form submission
     username = request.form.get("username").strip()
     password = request.form.get("password").strip()
+    hcaptcha_response = request.form.get("h-captcha-response").strip()
 
     # Server Side Form Validation -> Start
-    if not (username or password):
-        return jsonify({"error": "All fields are required"})
+    if not (username and password and hcaptcha_response):
+        return jsonify({"error": "All fields including captcha are required"})
+    
+    if not verify_hcaptcha(hcaptcha_response):
+        return jsonify({"error": "Captcha verification failed"})
 
     if not 5 <= len(username) <= 15:
         return jsonify({"error": "Username must have been 5-15 characters long"})

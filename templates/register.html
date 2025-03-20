@@ -21,8 +21,8 @@
         <!-- Alert box end -->
         <form class="form" id="postreg">
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email"
-                    required autofocus>
+                <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email" required
+                    autofocus>
                 <label for="email">Email address</label>
             </div>
             <div class="form-floating mb-3">
@@ -43,6 +43,8 @@
 
                 <label for="confirmPassword">Confirm Password</label>
             </div>
+            <br>
+            <div class="h-captcha" data-sitekey="c52290c0-22da-4c34-afde-7ac8a29004d4"></div>
             <br>
             <button type="submit" class="formSubmitbtn">
                 <span id="btn-text">REGISTER</span>
@@ -78,18 +80,20 @@
                 data: $(this).serialize(),
                 dataType: "json",
                 success: function (response) {
+                    hcaptcha.reset();
                     if (response.error) {
                         alertMessage.textContent = response.error;
-                        alertBox.classList.remove("d-none","alert-danger");
+                        alertBox.classList.remove("d-none", "alert-danger");
                         alertBox.classList.add("alert-warning");
                     } else {
                         $('#postreg')[0].reset();
                         alertMessage.textContent = "Registration successfull";
-                        alertBox.classList.remove("d-none","alert-warning","alert-danger");
+                        alertBox.classList.remove("d-none", "alert-warning", "alert-danger");
                         alertBox.classList.add("alert-success");
                     }
                 },
                 error: function () {
+                    hcaptcha.reset();
                     errorMessage.textContent = "An unexpected error occurred";
                     alertBox.classList.remove("d-none", "alert-warning");
                     alertBox.classList.add("alert-danger")
@@ -100,5 +104,8 @@
                 }
             });
         });
-    }); </script>
+    });
+
+</script>
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 {% endblock %}
