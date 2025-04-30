@@ -480,7 +480,9 @@ def verify_totp():
 
     gen_totp = pyotp.TOTP(user["secret_key"])
 
-    if gen_totp.verify(totp):
+    print(gen_totp.now())
+
+    if gen_totp.verify(int(totp)):
         cursor.execute(
             "UPDATE users SET secondary_verification=True WHERE id=%s;",
             (session["id"],),

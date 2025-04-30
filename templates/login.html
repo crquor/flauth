@@ -32,7 +32,7 @@
                 <label for="password">Password</label>
             </div>
             <br>
-            <div class="h-captcha" data-sitekey="c52290c0-22da-4c34-afde-7ac8a29004d4"></div>
+            <div class="h-captcha" data-sitekey="c52290c0-22da-4c34-afde-7ac8a29004d4" data-theme="dark" style="max-width: 100%;"></div>
             <br>
             <button type="submit" class="formSubmitbtn">
                 <span id="btn-text">LOGIN</span>
@@ -86,8 +86,9 @@
                 },
                 error: function () {
                     hcaptcha.reset();
-                    errorMessage.textContent = "An unexpected error occurred"
-                    alertBox.classList.remove("d-none")
+                    errorMessage.textContent = "An unexpected error occurred";
+                    alertBox.classList.remove("d-none", "alert-warning");
+                    alertBox.classList.add("alert-danger");
                 },
                 complete: function () {
                     btnText.classList.remove("d-none");
